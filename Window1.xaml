@@ -18,5 +18,8 @@
             </Image>
         </StackPanel>
         <ProgressBar Name="downloadProgress" Height="20" Margin="50 0" Minimum="0" Maximum="100" />
+        <Button Name="finnishManager" Content="Descargando..." Margin="200 20" Padding="10"
+                IsEnabled="False" Click="finnishManager_Click"/>
+
     </StackPanel>
 </Window>

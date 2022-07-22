@@ -135,6 +135,7 @@
     <Compile Include="ForgeGuide.xaml.cs">
       <DependentUpon>ForgeGuide.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ConnectionChecker.cs" />
     <Compile Include="Helpers\DownloadManager.cs" />
     <Compile Include="Helpers\MinecraftVersionChecker.cs" />
     <Compile Include="Models\ModsData.cs" />
@@ -193,6 +194,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\App\svg\wifi.gif" />
     <Resource Include="Assets\App\back\Hongo.png" />
     <Resource Include="Assets\App\back\redWorld.png" />
     <Resource Include="Assets\App\back\SpaceRun.png" />

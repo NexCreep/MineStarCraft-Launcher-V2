@@ -37,7 +37,27 @@ namespace MineStarCraft_Launcher
             download.client.DownloadProgressChanged += Client_DownloadProgressChanged;
             download.client.DownloadFileCompleted += new AsyncCompletedEventHandler(Client_DownloadFileCompleted);
 
-            download.start();
+            if (ConnectionChecker.check())
+            {
+                download.start();
+            }
+            else
+            {
+                downloadStatusMsg.Text = "No hay conexion a la red.";
+
+                var wifiImage = new BitmapImage();
+                wifiImage.BeginInit();
+                wifiImage.UriSource = new Uri("./Assets/App/svg/wifi.gif", UriKind.Relative);
+                wifiImage.EndInit();
+
+                ImageBehavior.SetAnimatedSource(gear, wifiImage);
+
+                MessageBoxResult result = MessageBox.Show("Uups! No hay conexion con la red: \n - Conectese a la red. \n - Reinicia el Launcher",
+                    "Error de red", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                finnishManager.Content = "Cerrar";
+                finnishManager.IsEnabled = true;
+            }
         }
 
         private void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
@@ -65,11 +85,19 @@ namespace MineStarCraft_Launcher
             gearController.Pause();
 
             downloadStatusMsg.Text = "Forge 1.12.2 ha sido instalado";
+            finnishManager.Content = "Cerrar";
+            finnishManager.IsEnabled = true;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (download.client.IsBusy)
+                e.Cancel = true;
+        }
 
+        private void finnishManager_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

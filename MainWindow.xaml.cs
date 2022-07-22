@@ -47,7 +47,7 @@ namespace MineStarCraft_Launcher
         {
             modRenderer.ModRenderProcess();
 
-            if (MinecraftVersionChecker.checkForge())
+            if (!MinecraftVersionChecker.checkForge())
             {
                 MessageBoxResult result = MessageBox.Show("No se ha detectado Forge para Minecraft 1.12. \n¿Quieres descargarla?", 
                     "Compatibilidad de Forge", MessageBoxButton.YesNo);

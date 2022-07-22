@@ -34,5 +34,10 @@ namespace MineStarCraft_Launcher.Helpers
             client.DownloadFileAsync(new Uri(uri), finalFilename);
         }
 
+        public void stop()
+        {
+            client.CancelAsync();
+        }
+
     }
 }
