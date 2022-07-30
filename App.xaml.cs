@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using MineStarCraft_Launcher.Helpers;
+
 namespace MineStarCraft_Launcher
 {
     /// <summary>
@@ -13,9 +15,9 @@ namespace MineStarCraft_Launcher
     /// </summary>
     public partial class App : Application
     {
-        private void Application_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
-
+            new SettingsDB();
         }
     }
 }

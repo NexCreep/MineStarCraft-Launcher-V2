@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace MineStarCraft_Launcher
     public partial class Window1 : Window
     {
         DownloadManager download;
+        AuditSystem audit;
 
         public Window1()
         {
@@ -33,11 +35,20 @@ namespace MineStarCraft_Launcher
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            audit = new AuditSystem(Application.Current.MainWindow);
+
             download = new DownloadManager("forge");
             download.client.DownloadProgressChanged += Client_DownloadProgressChanged;
             download.client.DownloadFileCompleted += new AsyncCompletedEventHandler(Client_DownloadFileCompleted);
 
-            if (ConnectionChecker.check())
+            bool IsConnected = false;
+            try 
+            {
+                IsConnected = ConnectionChecker.check();
+
+            } catch ( PingException ex ) { audit.error("No se pudo determinar el estado de la conexion", ex); }
+
+            if (IsConnected)
             {
                 download.start();
             }

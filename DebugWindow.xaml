@@ -1,0 +1,28 @@
+﻿<Window x:Class="MineStarCraft_Launcher.DebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MineStarCraft_Launcher"
+        mc:Ignorable="d"
+        Title="DebugWindow" Height="400" Width="400"
+        ResizeMode="NoResize" Loaded="Window_Loaded">
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+        <DataGrid AutoGenerateColumns="False" 
+                  Margin="50"
+          Height="200" 
+          HorizontalAlignment="Left" 
+          Name="dataGrid1" 
+          VerticalAlignment="Top" 
+          Width="200">
+            <DataGrid.Columns >
+                <DataGridTextColumn Binding="{Binding Path=A}" MinWidth="50" />
+                <DataGridTextColumn Binding="{Binding Path=B}" MinWidth="50" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Vertical">
+            <Button x:Name="Reset" Click="Reset_Click">Reset</Button>
+            <Button x:Name="Reload" Click="Reload_Click">Reload</Button>
+        </StackPanel>
+    </Grid>
+</Window>

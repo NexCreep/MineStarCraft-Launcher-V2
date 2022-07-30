@@ -8,7 +8,8 @@
         Loaded="Window_Loaded"
         Closing="Window_Closing"
         Title="MineStarCraft Launcher V2" Height="720" Width="1280"
-        MinHeight="450" MinWidth="800">
+        WindowStartupLocation="CenterScreen"
+        MinHeight="550" MinWidth="1200" ResizeMode="CanMinimize">
 	<Window.Resources>
 		<Style x:Key="FocusVisual">
 			<Setter Property="Control.Template">
@@ -19,9 +20,9 @@
 				</Setter.Value>
 			</Setter>
 		</Style>
-		<SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FF90EE90"/>
 		<SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
-		<SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FF98DD90"/>
         <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
         <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
 		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
@@ -95,8 +96,8 @@
                            FontSize="28" Margin="10 0" Text="?" Height="50"/>
                     <TextBlock TextAlignment="Center" Foreground="White"
                            FontSize="28" Height="50">Mods Instalados</TextBlock>
-                    <Button Style="{DynamicResource ButtonStyle1}" Margin="20 0"
-                            Background="Transparent"
+                    <Button Margin="20 0"
+                            Background="Transparent" Style="{DynamicResource ButtonStyle1}"
                             Padding="2" BorderThickness="0"
                             FontSize="16" FontWeight="Bold" Cursor="Hand"
                             VerticalAlignment="Center" Click="Folder_Mod_Click">
@@ -107,6 +108,7 @@
 
                 <ListBox Grid.Row="1" Name="modList"
                          Background="{x:Null}"
+                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          ScrollViewer.CanContentScroll="False"
                          Margin="10 1" BorderBrush="{x:Null}" Focusable="False">
                     <ListBox.Resources>
@@ -169,7 +171,7 @@
                             <Setter Property="Focusable" Value="False" />
                             <Setter Property="Cursor" Value="Hand" />
                             <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger Property="IsMouseOver" Value="true">
                                     <Setter Property="Background" Value="Red" />
                                 </Trigger>
                             </Style.Triggers>
@@ -188,17 +190,45 @@
             
 		</Grid>
         <Grid Grid.Column="1">
+            <StackPanel>
+                <TextBlock Name="versionText" HorizontalAlignment="Center" Foreground="LightGray" />
+                <TextBlock Name="launcherTypeText" HorizontalAlignment="Center" Foreground="LightGray" />
+            </StackPanel>
             <StackPanel Orientation="Vertical"
                         VerticalAlignment="Center">
                 <Image Source="./Assets/App/svg/MineStarCraftLogo.png"
                        Stretch="UniformToFill"/>
             </StackPanel>
         </Grid>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <Canvas>
+                <Frame Background="White" Name="SelectorFrame"
+                       Canvas.Top="-160" Canvas.Left="-140" NavigationUIVisibility="Hidden"/>
+            </Canvas>
+        </StackPanel>
 		<Grid Grid.Column="2">
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="2*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid Grid.Row="2" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Name="StartLauncherButton" Style="{DynamicResource ButtonStyle1}" 
+                        Margin="20" Padding="20" Cursor="Hand" FontWeight="SemiBold"
+                        Content="Empezar" FontSize="24" Click="StartLauncherButton_Click"
+                        Grid.Column="0"/>
+
+                <Button Name="ChangeLauncherButton" Style="{DynamicResource ButtonStyle1}"
+                        Margin="10 20" Padding="20" Cursor="Hand"
+                        Grid.Column="1" Click="ChangeLauncherButton_Click">
+                    <Image Source="./Assets/App/svg/reload.png" />
+                </Button>
+
+            </Grid>
         </Grid>
 	</Grid>
 </Window>

@@ -14,7 +14,10 @@ namespace MineStarCraft_Launcher.Helpers
             string hostForTest = "8.8.8.8";
 
             Ping ping = new Ping();
-            PingReply reply = ping.Send(hostForTest, 3000);
+            PingReply reply;
+
+            try { reply = ping.Send(hostForTest, 3000); }
+            catch { throw; }
 
             return reply.Status == IPStatus.Success;
         }
