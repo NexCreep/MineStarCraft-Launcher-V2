@@ -6,29 +6,30 @@
         xmlns:local="clr-namespace:MineStarCraft_Launcher"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
+        ContentRendered="Window_ContentRendered"
         Closing="Window_Closing"
         Title="MineStarCraft Launcher V2" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen"
         MinHeight="550" MinWidth="1200" ResizeMode="CanMinimize">
-	<Window.Resources>
-		<Style x:Key="FocusVisual">
-			<Setter Property="Control.Template">
-				<Setter.Value>
-					<ControlTemplate>
-						<Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <SolidColorBrush x:Key="Button.Static.Background" Color="#FF90EE90"/>
-		<SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
         <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FF98DD90"/>
         <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
         <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FFC4E5F6"/>
-		<SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
-		<SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-		<SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-		<SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628B"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
 
         <SolidColorBrush x:Key="ListBoxItem.MouseOver.Background" Color="red"/>
         <SolidColorBrush x:Key="ListBoxItem.MouseOver.Border" Color="red"/>
@@ -70,8 +71,22 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ServerStatusHeader" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextTrimming" Value="None"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Margin" Value="6 0"/>
+        </Style>
+        <Style x:Key="ServerStatusSubheader" TargetType="{x:Type TextBlock}">
+            <Setter Property="TextWrapping" Value="NoWrap"/>
+            <Setter Property="TextTrimming" Value="None"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Margin" Value="6 2"/>
+        </Style>
     </Window.Resources>
-	<Grid>
+    <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="./Assets/App/back/Untitle.png" Stretch="UniformToFill"/>
         </Grid.Background>
@@ -185,10 +200,10 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
-                
+
             </Grid>
-            
-		</Grid>
+
+        </Grid>
         <Grid Grid.Column="1">
             <StackPanel>
                 <TextBlock Name="versionText" HorizontalAlignment="Center" Foreground="LightGray" />
@@ -200,18 +215,47 @@
                        Stretch="UniformToFill"/>
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <Canvas>
-                <Frame Background="White" Name="SelectorFrame"
-                       Canvas.Top="-160" Canvas.Left="-140" NavigationUIVisibility="Hidden"/>
-            </Canvas>
-        </StackPanel>
-		<Grid Grid.Column="2">
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*" />
                 <RowDefinition Height="2*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center">
+                    <Image Name="ServerStatusGif" Margin="60 0"/>
+                    <StackPanel 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                        <TextBlock Style="{DynamicResource ServerStatusHeader}"
+                                   Foreground="White">
+                            Estado del servidor:
+                        </TextBlock>
+                        <TextBlock Style="{DynamicResource ServerStatusHeader}"
+                                   Name="ServerStatusResult"
+                                   Foreground="White">
+                            Checking...
+                        </TextBlock>
+                    </StackPanel>
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                        <TextBlock Name="ServerStatusLatency"
+                            Style="{DynamicResource ServerStatusSubheader}">
+                            Latencia: ?
+                        </TextBlock>
+                        <TextBlock Name="ServerStatusVersion"
+                            Style="{DynamicResource ServerStatusSubheader}">
+                            Versión: ?
+                        </TextBlock>
+                        <TextBlock Name="ServerStatusPlayers"
+                            Style="{DynamicResource ServerStatusSubheader}">
+                            Jugadores: ?/?
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
             <Grid Grid.Row="2" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
@@ -230,5 +274,12 @@
 
             </Grid>
         </Grid>
-	</Grid>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <Canvas>
+                <Frame Background="White" Name="SelectorFrame"
+                       Canvas.Top="-160" Canvas.Left="-140" NavigationUIVisibility="Hidden"/>
+            </Canvas>
+        </StackPanel>
+    </Grid>
 </Window>

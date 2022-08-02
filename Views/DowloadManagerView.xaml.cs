@@ -23,12 +23,12 @@ namespace MineStarCraft_Launcher
     /// <summary>
     /// Lógica de interacción para Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class DownloadManagerView : Window
     {
         DownloadManager download;
         AuditSystem audit;
 
-        public Window1()
+        public DownloadManagerView()
         {
             InitializeComponent();
         }
@@ -58,7 +58,7 @@ namespace MineStarCraft_Launcher
 
                 var wifiImage = new BitmapImage();
                 wifiImage.BeginInit();
-                wifiImage.UriSource = new Uri("./Assets/App/svg/wifi.gif", UriKind.Relative);
+                wifiImage.UriSource = new Uri("../Assets/App/svg/wifi.gif", UriKind.Relative);
                 wifiImage.EndInit();
 
                 ImageBehavior.SetAnimatedSource(gear, wifiImage);
@@ -109,6 +109,11 @@ namespace MineStarCraft_Launcher
         private void finnishManager_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+
         }
     }
 }

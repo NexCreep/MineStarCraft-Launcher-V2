@@ -106,5 +106,17 @@ namespace MineStarCraft_Launcher.Properties {
                 this["firstRun"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("localhost:25565")]
+        public string minecraftServer {
+            get {
+                return ((string)(this["minecraftServer"]));
+            }
+            set {
+                this["minecraftServer"] = value;
+            }
+        }
     }
 }

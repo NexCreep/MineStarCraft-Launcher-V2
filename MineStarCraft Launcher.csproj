@@ -140,10 +140,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DebugWindow.xaml.cs">
+    <Compile Include="Helpers\ServerStatusChecker.cs" />
+    <Compile Include="Views\DebugWindow.xaml.cs">
       <DependentUpon>DebugWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ForgeGuide.xaml.cs">
+    <Compile Include="Views\ForgeGuide.xaml.cs">
       <DependentUpon>ForgeGuide.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\SettingsDB.cs" />
@@ -158,14 +159,14 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="ViewRenderer\ModRenderer.cs" />
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
+    <Compile Include="Views\DowloadManagerView.xaml.cs">
+      <DependentUpon>DowloadManagerView.xaml</DependentUpon>
     </Compile>
-    <Page Include="DebugWindow.xaml">
+    <Page Include="Views\DebugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ForgeGuide.xaml">
+    <Page Include="Views\ForgeGuide.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -186,7 +187,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Window1.xaml">
+    <Page Include="Views\DowloadManagerView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -220,6 +221,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\App\svg\server-running.gif" />
+    <Resource Include="Assets\App\svg\server-down.gif" />
     <Resource Include="Assets\App\svg\reload.png" />
     <Resource Include="Assets\App\svg\minecraft_logo.png" />
     <Resource Include="Assets\App\svg\tlaunche_logo.png" />

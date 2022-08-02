@@ -13,7 +13,7 @@
         <TextBlock Margin="15,20" FontSize="16">
             Siga los pasos de la imagen:
         </TextBlock>
-        <Image Source="./Assets/App/svg/forge_guide.png" 
+        <Image Source="../Assets/App/svg/forge_guide.png" 
                Width="310"/>
         <Button Content="Ya esta, instalado!" Margin="100 20" Padding="10" Click="Button_Click"/>
     </StackPanel>

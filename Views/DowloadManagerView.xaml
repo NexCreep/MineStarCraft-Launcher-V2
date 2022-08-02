@@ -1,4 +1,4 @@
-﻿<Window x:Class="MineStarCraft_Launcher.Window1"
+﻿<Window x:Class="MineStarCraft_Launcher.DownloadManagerView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,13 +8,14 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
+        ContentRendered="Window_ContentRendered"
         WindowStartupLocation="CenterOwner"
         Title="Gestor de Versiones" Height="400" Width="600" ResizeMode="NoResize">
     <StackPanel VerticalAlignment="Center">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
             <TextBlock Name="downloadStatusMsg" Text="Descargando la version de Forge 1.12.2" HorizontalAlignment="Center" FontSize="26" FontStretch="Normal"/>
             <TextBlock Name="versionMsg" Text="Forge 1.12.2 (14.23.5.2860)" HorizontalAlignment="Right" Margin="0 4 0 0" FontSize="12" FontStretch="Normal"/>
-            <Image gif:ImageBehavior.AnimatedSource="./Assets/App/svg/gear.gif" 
+            <Image gif:ImageBehavior.AnimatedSource="../Assets/App/svg/gear.gif" 
                    Width="150" Stretch="UniformToFill" Name="gear" RenderTransformOrigin="0.5,0.5">
             </Image>
         </StackPanel>

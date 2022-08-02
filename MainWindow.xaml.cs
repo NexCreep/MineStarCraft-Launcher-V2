@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Threading;
 using System.Windows.Shapes;
 using System.Diagnostics;
 
@@ -20,6 +21,7 @@ using MineStarCraft_Launcher.Helpers;
 using MineStarCraft_Launcher.ViewRenderer;
 using MineStarCraft_Launcher.Models;
 using System.ComponentModel;
+using WpfAnimatedGif;
 
 namespace MineStarCraft_Launcher
 {
@@ -32,6 +34,8 @@ namespace MineStarCraft_Launcher
         string modDirectory;
 
         ModRenderer modRenderer;
+
+        string actualServerImageUri;
 
         public MainWindow()
         {
@@ -52,28 +56,85 @@ namespace MineStarCraft_Launcher
 
             modRenderer.ModRenderProcess();
 
+            if (SettingsDB.getLauncherMode().ToLower() == "none")
+                OpenLauncherSelector();
+
+            ServerStatusChecker serverStatus = new ServerStatusChecker();
+
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(Timer_Tick);
+            timer.Interval = new TimeSpan(0, 0, 10);
+            timer.Start();
+
 #if DEBUG
             DebugWindow debugWindow = new DebugWindow();
             debugWindow.Show();
 #endif
+        }
 
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
             if (!MinecraftVersionChecker.checkForge())
             {
-                MessageBoxResult result = MessageBox.Show("No se ha detectado Forge para Minecraft 1.12. \n¿Quieres descargarla?", 
+                MessageBoxResult result = MessageBox.Show("No se ha detectado Forge para Minecraft 1.12. \n¿Quieres descargarla?",
                     "Compatibilidad de Forge", MessageBoxButton.YesNo, MessageBoxImage.Information);
                 switch (result)
                 {
                     case MessageBoxResult.Yes:
-                        Window1 window1 = new Window1();
+                        DownloadManagerView window1 = new DownloadManagerView();
                         window1.Owner = this;
                         window1.ShowDialog();
                         break;
                 }
             }
+        }
 
-            if (SettingsDB.getLauncherMode().ToLower() == "none")
-                OpenLauncherSelector();
-                
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            ServerStatusData statusData = ServerStatusChecker.StartCheck();
+            
+            if (statusData.Lantency >= 0)
+            {
+                if (actualServerImageUri != "../Assets/App/svg/server-running.gif")
+                {
+                    BitmapImage onlineGif = new BitmapImage();
+                    onlineGif.BeginInit();
+                    onlineGif.UriSource = new Uri("../Assets/App/svg/server-running.gif", UriKind.Relative);
+                    onlineGif.EndInit();
+
+                    ImageBehavior.SetAnimatedSource(ServerStatusGif, onlineGif);
+
+                    actualServerImageUri = "../Assets/App/svg/server-running.gif";
+                }
+
+                ServerStatusResult.Text = "Online";
+                ServerStatusResult.Foreground = Brushes.LightGreen;
+
+                ServerStatusLatency.Text = $"Latencia: {statusData.Lantency} ms";
+                ServerStatusVersion.Text = $"Versión: {statusData.Version}";
+                ServerStatusPlayers.Text = $"Jugadores: {statusData.ActualPlayers}/{statusData.MaxPlayers}";
+            }
+            else
+            {
+                if (actualServerImageUri != "../Assets/App/svg/server-down.gif")
+                {
+                    BitmapImage onlineGif = new BitmapImage();
+                    onlineGif.BeginInit();
+                    onlineGif.UriSource = new Uri("../Assets/App/svg/server-down.gif", UriKind.Relative);
+                    onlineGif.EndInit();
+
+                    ImageBehavior.SetAnimatedSource(ServerStatusGif, onlineGif);
+
+                    actualServerImageUri = "../Assets/App/svg/server-down.gif";
+                }
+
+                ServerStatusResult.Text = "Offline";
+                ServerStatusResult.Foreground = Brushes.Red;
+
+                ServerStatusLatency.Text = $"Latencia: ?";
+                ServerStatusVersion.Text = $"Versión: ?";
+                ServerStatusPlayers.Text = $"Jugadores: ?";
+            }
         }
 
         private void OpenLauncherSelector()

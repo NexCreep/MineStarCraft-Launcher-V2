@@ -26,7 +26,6 @@ namespace MineStarCraft_Launcher.Pages
         private string launcherSelected;
 
         public event EventHandler FinnishSelection;
-        public delegate void FinnishSelectionEvent(object sender, FinnishSelectionArgs e);
 
         public LauncherSelector()
         {
