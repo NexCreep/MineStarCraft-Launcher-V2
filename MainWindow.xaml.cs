@@ -63,7 +63,7 @@ namespace MineStarCraft_Launcher
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Tick += new EventHandler(Timer_Tick);
-            timer.Interval = new TimeSpan(0, 0, 10);
+            timer.Interval = new TimeSpan(0, 0, 5);
             timer.Start();
 
 #if DEBUG
@@ -87,11 +87,40 @@ namespace MineStarCraft_Launcher
                         break;
                 }
             }
+
+            Pages.ModManager modManager = new Pages.ModManager();
+            modManager.modInstallationFinnished += ModManager_modInstallationFinnished;
+            frameModManager.Content = modManager;
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void ModManager_modInstallationFinnished(object sender, EventArgs e)
         {
-            ServerStatusData statusData = ServerStatusChecker.StartCheck();
+            modRenderer.ModRenderProcess();
+        }
+
+        private async void Timer_Tick(object sender, EventArgs e)
+        {
+            if (!ConnectionChecker.check())
+            {
+                if (actualServerImageUri != "../Assets/App/svg/wifi.gif")
+                {
+                    BitmapImage onlineGif = new BitmapImage();
+                    onlineGif.BeginInit();
+                    onlineGif.UriSource = new Uri("../Assets/App/svg/wifi.gif", UriKind.Relative);
+                    onlineGif.EndInit();
+
+                    ImageBehavior.SetAnimatedSource(ServerStatusGif, onlineGif);
+
+                    actualServerImageUri = "../Assets/App/svg/wifi.gif";
+                }
+
+                ServerStatusResult.Text = "Not Connection";
+                ServerStatusResult.Foreground = Brushes.Yellow;
+
+                return;
+            }
+
+            ServerStatusData statusData = await ServerStatusChecker.StartCheck();
             
             if (statusData.Lantency >= 0)
             {
@@ -196,10 +225,6 @@ namespace MineStarCraft_Launcher
             OpenLauncherSelector();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            
-        }
     }
 
     

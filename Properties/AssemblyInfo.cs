@@ -8,11 +8,11 @@ using System.Windows;
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
 [assembly: AssemblyTitle("MineStarCraft Launcher")]
-[assembly: AssemblyDescription("Launcher oficial para MineStarCraft©")]
+[assembly: AssemblyDescription("Launcher oficial para MineStarCraft ©")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Silvaniax Network (NexCreep)")]
 [assembly: AssemblyProduct("MineStarCraft Launcher")]
-[assembly: AssemblyCopyright("NexCreep ©  2022")]
+[assembly: AssemblyCopyright("NexCreep © 2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -51,6 +51,6 @@ using System.Windows;
 // Puede especificar todos los valores o usar los valores predeterminados de número de compilación y de revisión
 // utilizando el carácter "*", como se muestra a continuación:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.60.2")]
-[assembly: AssemblyFileVersion("2.0.60.2")]
+[assembly: AssemblyVersion("2.0.70.4")]
+[assembly: AssemblyFileVersion("2.0.70.4")]
 [assembly: NeutralResourcesLanguage("es")]

@@ -1,0 +1,16 @@
+﻿<Window x:Class="MineStarCraft_Launcher.Views.ModPackDownloadWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MineStarCraft_Launcher.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Closed="Window_Closed"
+        ContentRendered="Window_ContentRendered"
+        Title="Gestor de Mods" Height="120" Width="600" ResizeMode="CanMinimize">
+    <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5 0">
+        <TextBlock Name="ModAction" Text="Empezando..." FontSize="20" Margin="0 5"/>
+        <ProgressBar Name="ModActionBar" Height="25" Minimum="0" Maximum="100"/>
+    </StackPanel>
+</Window>

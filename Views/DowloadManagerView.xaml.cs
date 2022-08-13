@@ -33,13 +33,15 @@ namespace MineStarCraft_Launcher
             InitializeComponent();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
             audit = new AuditSystem(Application.Current.MainWindow);
 
             download = new DownloadManager("forge");
             download.client.DownloadProgressChanged += Client_DownloadProgressChanged;
+            download.ifDownloadNotOcurred += Client_DownloadFileCompleted;
             download.client.DownloadFileCompleted += new AsyncCompletedEventHandler(Client_DownloadFileCompleted);
+            
 
             bool IsConnected = false;
             try 
@@ -50,7 +52,7 @@ namespace MineStarCraft_Launcher
 
             if (IsConnected)
             {
-                download.start();
+                download.StartForge();
             }
             else
             {
@@ -76,6 +78,7 @@ namespace MineStarCraft_Launcher
             if (!e.Cancelled || e.Error != null)
             {
                 downloadStatusMsg.Text = "Instalando la version de Forge 1.12.2";
+                downloadProgress.Value = 100.0;
 
                 ForgeGuide forgeWindow = new ForgeGuide(download.finalFilename);
                 forgeWindow.Owner = this;
@@ -109,11 +112,6 @@ namespace MineStarCraft_Launcher
         private void finnishManager_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void Window_ContentRendered(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MineStarCraft_Launcher"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         ContentRendered="Window_ContentRendered"
-        Closing="Window_Closing"
         Title="MineStarCraft Launcher V2" Height="720" Width="1280"
         WindowStartupLocation="CenterScreen"
         MinHeight="550" MinWidth="1200" ResizeMode="CanMinimize">
@@ -224,7 +224,7 @@
             <Grid Grid.Row="0">
                 <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center">
-                    <Image Name="ServerStatusGif" Margin="60 0"/>
+                    <Image Name="ServerStatusGif" Width="300"  Margin="60 0"/>
                     <StackPanel 
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
@@ -256,6 +256,12 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
+            <Grid Grid.Row="1">
+                <StackPanel VerticalAlignment="Center">
+                    <Frame Name="frameModManager"
+                       NavigationUIVisibility="Hidden"/>
+                </StackPanel>
+            </Grid>
             <Grid Grid.Row="2" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*"/>
@@ -269,7 +275,7 @@
                 <Button Name="ChangeLauncherButton" Style="{DynamicResource ButtonStyle1}"
                         Margin="10 20" Padding="20" Cursor="Hand"
                         Grid.Column="1" Click="ChangeLauncherButton_Click">
-                    <Image Source="./Assets/App/svg/reload.png" />
+                    <fa:FontAwesome Icon="WindowRestore" FontSize="24" VerticalAlignment="Center" FontWeight="Light"/>
                 </Button>
 
             </Grid>

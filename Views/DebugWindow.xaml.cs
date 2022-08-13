@@ -37,11 +37,12 @@ namespace MineStarCraft_Launcher
             ObservableCollection<DataObject> list = new ObservableCollection<DataObject>();
             list.Add(new DataObject { A = "Version (short)", B = Helpers.SettingsDB.getShortVersion() });
             list.Add(new DataObject { A = "Version (long)", B = Helpers.SettingsDB.getLongVersion() });
-            list.Add(new DataObject { A = "Mod Pack Version", B = Helpers.SettingsDB.getActuaModPackVersion() });
             list.Add(new DataObject { A = "Launcher Type", B = Helpers.SettingsDB.getLauncherMode() });
             list.Add(new DataObject { A = "Mod Pack File Url", B = Helpers.SettingsDB.getModPackUrl() });
             list.Add(new DataObject { A = "Forge Installer Url", B = Helpers.SettingsDB.getForgeUrl() });
             list.Add(new DataObject { A = "Fisrt Run", B = Properties.Settings.Default.firstRun.ToString() });
+            list.Add(new DataObject { A = "Server Address", B = Properties.Settings.Default.minecraftServer });
+            list.Add(new DataObject { A = "Forge Installed", B = Properties.Settings.Default.isForgeInstalled.ToString() });
             dataGrid1.ItemsSource = list;
         }
 

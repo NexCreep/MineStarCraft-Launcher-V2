@@ -9,12 +9,12 @@
         ResizeMode="NoResize" Loaded="Window_Loaded">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <DataGrid AutoGenerateColumns="False" 
-                  Margin="50"
-          Height="200" 
-          HorizontalAlignment="Left" 
-          Name="dataGrid1" 
-          VerticalAlignment="Top" 
-          Width="200">
+                  Margin="30 50"
+                  Height="200" 
+                  HorizontalAlignment="Left" 
+                  Name="dataGrid1" 
+                  VerticalAlignment="Top" 
+                  Width="300">
             <DataGrid.Columns >
                 <DataGridTextColumn Binding="{Binding Path=A}" MinWidth="50" />
                 <DataGridTextColumn Binding="{Binding Path=B}" MinWidth="50" />

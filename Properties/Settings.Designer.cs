@@ -50,18 +50,6 @@ namespace MineStarCraft_Launcher.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string actualModPackVersion {
-            get {
-                return ((string)(this["actualModPackVersion"]));
-            }
-            set {
-                this["actualModPackVersion"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string modPackUrl {
             get {
                 return ((string)(this["modPackUrl"]));
@@ -109,13 +97,37 @@ namespace MineStarCraft_Launcher.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("localhost:25565")]
+        [global::System.Configuration.DefaultSettingValueAttribute("vps-2379a8cf.vps.ovh.net:25565")]
         public string minecraftServer {
             get {
                 return ((string)(this["minecraftServer"]));
             }
             set {
                 this["minecraftServer"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://raw.githubusercontent.com/NexCreep/minesc-modpack-v2/main/packinfo.json")]
+        public string packInfoUrl {
+            get {
+                return ((string)(this["packInfoUrl"]));
+            }
+            set {
+                this["packInfoUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool isForgeInstalled {
+            get {
+                return ((bool)(this["isForgeInstalled"]));
+            }
+            set {
+                this["isForgeInstalled"] = value;
             }
         }
     }

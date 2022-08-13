@@ -27,11 +27,10 @@ namespace MineStarCraft_Launcher.Helpers
 
             if (settingsDB.longVersion.Length == 0) settingsDB.longVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             if (settingsDB.shortVersion.Length == 0) settingsDB.shortVersion = "v2.0";
-            if (settingsDB.actualModPackVersion.Length == 0) settingsDB.actualModPackVersion = "v0.0";
             if (settingsDB.launcherMode.Length == 0) settingsDB.launcherMode = "none";
 
-            settingsDB.modPackUrl = "http://localhost";
-            settingsDB.forgeUrl = "http://localhost";
+            settingsDB.modPackUrl = "https://github.com/NexCreep/minesc-modpack-v2/blob/main";
+            settingsDB.forgeUrl = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-installer.jar";
 
             settingsDB.Save();
         }
@@ -40,24 +39,23 @@ namespace MineStarCraft_Launcher.Helpers
         {
             settingsDB.longVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             settingsDB.shortVersion = "v2.0";
-            settingsDB.actualModPackVersion = "v0.0";
-            settingsDB.modPackUrl = "http://localhost";
-            settingsDB.forgeUrl = "http://localhost";
+            settingsDB.modPackUrl = "https://github.com/NexCreep/minesc-modpack-v2/blob/main";
+            settingsDB.forgeUrl = "https://maven.minecraftforge.net/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-installer.jart";
             settingsDB.launcherMode = "none";
             settingsDB.firstRun = true;
+            settingsDB.isForgeInstalled = false;
 
             settingsDB.Save();
         }
 
         public static string getLongVersion() { return settingsDB.longVersion; }
         public static string getShortVersion() { return settingsDB.shortVersion; }
-        public static string getActuaModPackVersion() { return settingsDB.actualModPackVersion; }
         public static string getModPackUrl() { return settingsDB.modPackUrl; }
         public static string getForgeUrl() { return settingsDB.forgeUrl; }
         public static string getLauncherMode() { return settingsDB.launcherMode; }
 
-        public static void setActuaModPackVersion(string version) { settingsDB.actualModPackVersion = version; settingsDB.Save(); }
         public static void setLauncherMode(string mode) { settingsDB.launcherMode = mode; settingsDB.Save(); }
+        public static void setForgeInstallation(bool flag) { settingsDB.isForgeInstalled = flag; }
 
     }
 }

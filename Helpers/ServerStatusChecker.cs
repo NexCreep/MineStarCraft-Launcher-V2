@@ -19,28 +19,34 @@ namespace MineStarCraft_Launcher.Helpers
 
     class ServerStatusChecker
     {
-        public static ServerStatusData StartCheck()
+        public async static Task<ServerStatusData> StartCheck()
         {
             string minecraftServer = Properties.Settings.Default.minecraftServer;
             string[] addressSubstract = minecraftServer.Split(':');
 
 
-            MineStat stats = new MineStat(addressSubstract[0], ushort.Parse(addressSubstract[1]), 1);
-            if (stats.ServerUp)
+            ServerStatusData statusData = await Task.Run(() =>
             {
-                return new ServerStatusData {
-                    Lantency = stats.Latency,
-                    Version = stats.Version,
-                    ActualPlayers = stats.CurrentPlayersInt,
-                    MaxPlayers = stats.MaximumPlayersInt,
-                };
-                
-            }
+                MineStat stats = new MineStat(addressSubstract[0], ushort.Parse(addressSubstract[1]), 1);
+                if (stats.ServerUp)
+                {
+                    return new ServerStatusData
+                    {
+                        Lantency = stats.Latency,
+                        Version = stats.Version,
+                        ActualPlayers = stats.CurrentPlayersInt,
+                        MaxPlayers = stats.MaximumPlayersInt,
+                    };
 
-            return new ServerStatusData
-            {
-                Lantency = -1
-            };
+                }
+
+                return new ServerStatusData
+                {
+                    Lantency = -1
+                };
+            });
+
+            return statusData;
         }
 
     }

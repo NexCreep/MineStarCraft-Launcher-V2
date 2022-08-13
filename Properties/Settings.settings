@@ -8,9 +8,6 @@
     <Setting Name="shortVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="actualModPackVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="modPackUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -24,7 +21,13 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="minecraftServer" Type="System.String" Scope="User">
-      <Value Profile="(Default)">localhost:25565</Value>
+      <Value Profile="(Default)">vps-2379a8cf.vps.ovh.net:25565</Value>
+    </Setting>
+    <Setting Name="packInfoUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://raw.githubusercontent.com/NexCreep/minesc-modpack-v2/main/packinfo.json</Value>
+    </Setting>
+    <Setting Name="isForgeInstalled" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>
