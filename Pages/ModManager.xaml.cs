@@ -32,6 +32,8 @@ namespace MineStarCraft_Launcher.Pages
         public event EventHandler modInstallationFinnished;
         public delegate void modInstallationFinnishedEventHandler(object sender, EventArgs e);
 
+        private AuditSystem audit;
+
         public ModManager()
         {
             InitializeComponent();
@@ -39,6 +41,8 @@ namespace MineStarCraft_Launcher.Pages
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            audit = new AuditSystem();
+
             if (!ConnectionChecker.check())
             {
                 shortInfo.Text = "Updates not available";
@@ -66,132 +70,150 @@ namespace MineStarCraft_Launcher.Pages
 
         private void DownloadFullPack()
         {
-            using (WebClient wc = new WebClient())
+            try
             {
-                wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
-                wc.DownloadFileAsync(
-                        new Uri("https://github.com/NexCreep/minesc-modpack-v2/archive/refs/heads/main.zip"),
-                        $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\modpack.zip"
-                    );
+                using (WebClient wc = new WebClient())
+                {
+                    wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
+                    wc.DownloadFileAsync(
+                            new Uri("https://github.com/NexCreep/minesc-modpack-v2/archive/refs/heads/main.zip"),
+                            $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\modpack.zip"
+                        );
+                }
+            }catch (Exception except)
+            {
+                audit.error(except.Message, except);
             }
         }
 
         private void Wc_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
         {
-            if (!e.Cancelled && e.Error == null)
+            try
             {
-                if (Directory.Exists($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\minesc-modpack-v2-main"))
+                if (!e.Cancelled && e.Error == null)
+                {
+                    if (Directory.Exists($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\minesc-modpack-v2-main"))
+                        Directory.Delete($"{ Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\minesc-modpack-v2-main", true);
+
+                    ZipFile.ExtractToDirectory(
+                            $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\modpack.zip",
+                            $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods"
+                        );
+
+                    List<string> modFiles = Directory
+                        .GetFiles($"{ Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\minesc-modpack-v2-main", "*.*", SearchOption.TopDirectoryOnly)
+                        .ToList();
+
+                    foreach (string file in modFiles)
+                    {
+                        FileInfo fileInfo = new FileInfo(file);
+                        fileInfo.MoveTo($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\" + fileInfo.Name);
+                    }
+
                     Directory.Delete($"{ Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\minesc-modpack-v2-main", true);
+                    File.Delete($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\modpack.zip");
 
-                ZipFile.ExtractToDirectory(
-                        $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\modpack.zip",
-                        $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods"
-                    );
-
-                List<string> modFiles = Directory
-                    .GetFiles($"{ Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\minesc-modpack-v2-main", "*.*", SearchOption.TopDirectoryOnly)
-                    .ToList();
-
-                foreach (string file in modFiles)
-                {
-                    FileInfo fileInfo = new FileInfo(file);
-                    fileInfo.MoveTo($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\" + fileInfo.Name);
+                    using (WebClient wc = new WebClient())
+                    {
+                        wc.DownloadStringCompleted += Wc_DownloadStringCompleted; ;
+                        wc.DownloadStringAsync(new Uri(Properties.Settings.Default.packInfoUrl));
+                    }
+                    modInstallationFinnished.Invoke(this, EventArgs.Empty);
                 }
-
-                Directory.Delete($"{ Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\minesc-modpack-v2-main", true);
-                File.Delete($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\modpack.zip");
-
-                using (WebClient wc = new WebClient())
-                {
-                    wc.DownloadStringCompleted += Wc_DownloadStringCompleted; ;
-                    wc.DownloadStringAsync(new Uri(Properties.Settings.Default.packInfoUrl));
-                }
-                modInstallationFinnished.Invoke(this, EventArgs.Empty);
+            } catch (Exception except)
+            {
+                audit.error(except.Message, except);
             }
         }
 
         private void Wc_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
         {
-
-            if (!e.Cancelled && e.Error == null)
+            try
             {
-                PackInfo packInfo = JsonConvert.DeserializeObject<PackInfo>(e.Result);
-
-                if (packInfo.SetConfig.Count > 0)
+                if (!e.Cancelled && e.Error == null)
                 {
-                    foreach (string config in packInfo.SetConfig)
+                    PackInfo packInfo = JsonConvert.DeserializeObject<PackInfo>(e.Result);
+
+                    if (packInfo.SetConfig.Count > 0)
                     {
-                        using (WebClient wc = new WebClient())
+                        foreach (string config in packInfo.SetConfig)
                         {
-                            string newConfig = wc.DownloadString($"https://raw.githubusercontent.com/NexCreep/minesc-modpack-v2/main/.config/{config}");
-                            File.WriteAllText($@"{Environment.GetEnvironmentVariable("appdata")}/.minecraft/config/{config}", newConfig);
+                            using (WebClient wc = new WebClient())
+                            {
+                                string newConfig = wc.DownloadString($"https://raw.githubusercontent.com/NexCreep/minesc-modpack-v2/main/.config/{config}");
+                                File.WriteAllText($@"{Environment.GetEnvironmentVariable("appdata")}/.minecraft/config/{config}", newConfig);
+                            }
                         }
                     }
-                }
-                
 
-                if (!File.Exists($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\packinfo.json"))
-                {
-                    MessageBoxResult result = MessageBox.Show($"¿Quieres descargar el paquete de mods?\nNo version >> {packInfo.Version}",
-                            "Actualización disponible",
-                            MessageBoxButton.YesNo, MessageBoxImage.Question
-                        );
 
-                    if (result == MessageBoxResult.Yes)
+                    if (!File.Exists($"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\packinfo.json"))
                     {
-                        shortInfo.Text = "Instalando mods...";
-                        iconInfo.Icon = FontAwesome.WPF.FontAwesomeIcon.Gear;
-                        iconInfo.Foreground = Brushes.Brown;
-                        DownloadFullPack();
-                    }
-
-                    return;
-                }
-
-                PackInfo localPackInfo = JsonConvert.DeserializeObject<PackInfo>(
-                    File.ReadAllText(
-                            $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\packinfo.json"
-                        )
-                );
-
-                if (packInfo.Version != localPackInfo.Version)
-                {
-                    shortInfo.Text = $"Nueva actualización";
-                    longInfo.Text = $"Versión {localPackInfo.Version}";
-                    iconInfo.Icon = FontAwesome.WPF.FontAwesomeIcon.Warning;
-                    iconInfo.Foreground = Brushes.Yellow;
-
-                    MessageBoxResult result = MessageBox.Show(
-                        $"¿Quieres actualizar a la nueva version?\n{localPackInfo.Version} >> {packInfo.Version}",
-                        "Actualización disponible",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question
-                    );
-
-                    switch (result)
-                    {
-                        case MessageBoxResult.Yes:
-                            File.WriteAllText(
-                            $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\packinfo.json",
-                            JsonConvert.SerializeObject(packInfo)
+                        MessageBoxResult result = MessageBox.Show($"¿Quieres descargar el paquete de mods?\nNo version >> {packInfo.Version}",
+                                "Actualización disponible",
+                                MessageBoxButton.YesNo, MessageBoxImage.Question
                             );
 
-                            ModPackDownloadWindow downloadWindow = new ModPackDownloadWindow(packInfo);
-                            downloadWindow.onWindowClosed += DownloadWindow_onWindowClosed;
-                            downloadWindow.Owner = Window.GetWindow(this);
-                            downloadWindow.ShowDialog();
-                            break;
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            shortInfo.Text = "Instalando mods...";
+                            iconInfo.Icon = FontAwesome.WPF.FontAwesomeIcon.Gear;
+                            iconInfo.Foreground = Brushes.Brown;
+                            DownloadFullPack();
+                        }
 
+                        return;
                     }
 
-                    return;
-                }
+                    PackInfo localPackInfo = JsonConvert.DeserializeObject<PackInfo>(
+                        File.ReadAllText(
+                                $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\packinfo.json"
+                            )
+                    );
 
-                shortInfo.Text = $"Todo actualizado";
-                longInfo.Text = $"Versión {localPackInfo.Version}";
-                iconInfo.Icon = FontAwesome.WPF.FontAwesomeIcon.Check;
-                iconInfo.Foreground = Brushes.LightGreen;
+                    if (packInfo.Version != localPackInfo.Version)
+                    {
+                        shortInfo.Text = $"Nueva actualización";
+                        longInfo.Text = $"Versión {localPackInfo.Version}";
+                        iconInfo.Icon = FontAwesome.WPF.FontAwesomeIcon.Warning;
+                        iconInfo.Foreground = Brushes.Yellow;
+
+                        MessageBoxResult result = MessageBox.Show(
+                            $"¿Quieres actualizar a la nueva version?\n{localPackInfo.Version} >> {packInfo.Version}",
+                            "Actualización disponible",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Question
+                        );
+
+                        switch (result)
+                        {
+                            case MessageBoxResult.Yes:
+                                File.WriteAllText(
+                                $"{Environment.GetEnvironmentVariable("appdata")}\\.minecraft\\mods\\packinfo.json",
+                                JsonConvert.SerializeObject(packInfo)
+                                );
+
+                                ModPackDownloadWindow downloadWindow = new ModPackDownloadWindow(packInfo);
+                                downloadWindow.onWindowClosed += DownloadWindow_onWindowClosed;
+                                downloadWindow.Owner = Window.GetWindow(this);
+                                downloadWindow.ShowDialog();
+                                break;
+
+                        }
+
+                        return;
+                    }
+
+                    shortInfo.Text = $"Todo actualizado";
+                    longInfo.Text = $"Versión {localPackInfo.Version}";
+                    iconInfo.Icon = FontAwesome.WPF.FontAwesomeIcon.Check;
+                    iconInfo.Foreground = Brushes.LightGreen;
+                }
+            } catch (Exception except)
+            {
+                audit.error(except.Message, except);
             }
+            
         }
 
         private void DownloadWindow_onWindowClosed(object sender, EventArgs e)

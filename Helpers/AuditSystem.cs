@@ -17,6 +17,7 @@ namespace MineStarCraft_Launcher.Helpers
         private Notifier notifier;
         private DateTime actual;
 
+        public AuditSystem() { }
         public AuditSystem(Window currentWindow)
         {
             notifier = new Notifier(cfg =>
@@ -42,27 +43,31 @@ namespace MineStarCraft_Launcher.Helpers
 
         public void info(string msg)
         {
-            notifier.ShowInformation(string.Format("[INFO] {0}", msg));
+            if (notifier != null)
+                notifier.ShowInformation(string.Format("[INFO] {0}", msg));
             SyncTime();
             writeLog($"[{actual:HH:mm:ss,fff}/INFO] {msg}");
         }
 
         public void ok(string msg)
         {
-            notifier.ShowSuccess(string.Format("[GOOD] {0}", msg));
+            if (notifier != null)
+                notifier.ShowSuccess(string.Format("[GOOD] {0}", msg));
             SyncTime();
             writeLog($"[{actual:HH:mm:ss,fff}/GOOD] {msg}");
         }
 
         public void warm(string msg)
         {
-            notifier.ShowWarning(string.Format("[WARM]: {0}", msg));
+            if (notifier != null)
+                notifier.ShowWarning(string.Format("[WARM]: {0}", msg));
             SyncTime();
             writeLog($"[{actual:HH:mm:ss,fff}/WARM] {msg}");
         }
         public void error(string msg, Exception e)
         {
-            notifier.ShowError(string.Format("[ERROR]: {0}", msg));
+            if (notifier != null)
+                notifier.ShowError(string.Format("[ERROR]: {0}", msg));
             SyncTime();
             writeLog($"[{actual:HH:mm:ss,fff}/ERROR] {msg}: {e}");
         }

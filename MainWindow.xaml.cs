@@ -51,46 +51,60 @@ namespace MineStarCraft_Launcher
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            versionText.Text = $"{SettingsDB.getShortVersion()} ({SettingsDB.getLongVersion()})";
-            launcherTypeText.Text = $"Launcher type: {SettingsDB.getLauncherMode()}";
+            try
+            {
+                versionText.Text = $"{SettingsDB.getShortVersion()} ({SettingsDB.getLongVersion()})";
+                launcherTypeText.Text = $"Launcher type: {SettingsDB.getLauncherMode()}";
 
-            modRenderer.ModRenderProcess();
+                modRenderer.ModRenderProcess();
 
-            if (SettingsDB.getLauncherMode().ToLower() == "none")
-                OpenLauncherSelector();
+                if (SettingsDB.getLauncherMode().ToLower() == "none")
+                    OpenLauncherSelector();
 
-            ServerStatusChecker serverStatus = new ServerStatusChecker();
+                ServerStatusChecker serverStatus = new ServerStatusChecker();
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Tick += new EventHandler(Timer_Tick);
-            timer.Interval = new TimeSpan(0, 0, 5);
-            timer.Start();
+                DispatcherTimer timer = new DispatcherTimer();
+                timer.Tick += new EventHandler(Timer_Tick);
+                timer.Interval = new TimeSpan(0, 0, 5);
+                timer.Start();
 
 #if DEBUG
-            DebugWindow debugWindow = new DebugWindow();
-            debugWindow.Show();
+                DebugWindow debugWindow = new DebugWindow();
+                debugWindow.Show(); 
 #endif
+            }
+            catch (Exception except)
+            {
+                audit.error(except.Message, except);
+            }
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            if (!MinecraftVersionChecker.checkForge())
+            try
             {
-                MessageBoxResult result = MessageBox.Show("No se ha detectado Forge para Minecraft 1.12. \n¿Quieres descargarla?",
-                    "Compatibilidad de Forge", MessageBoxButton.YesNo, MessageBoxImage.Information);
-                switch (result)
+                if (!MinecraftVersionChecker.checkForge())
                 {
-                    case MessageBoxResult.Yes:
-                        DownloadManagerView window1 = new DownloadManagerView();
-                        window1.Owner = this;
-                        window1.ShowDialog();
-                        break;
+                    MessageBoxResult result = MessageBox.Show("No se ha detectado Forge para Minecraft 1.12. \n¿Quieres descargarla?",
+                        "Compatibilidad de Forge", MessageBoxButton.YesNo, MessageBoxImage.Information);
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes:
+                            DownloadManagerView window1 = new DownloadManagerView();
+                            window1.Owner = this;
+                            window1.ShowDialog();
+                            break;
+                    }
                 }
-            }
 
-            Pages.ModManager modManager = new Pages.ModManager();
-            modManager.modInstallationFinnished += ModManager_modInstallationFinnished;
-            frameModManager.Content = modManager;
+                Pages.ModManager modManager = new Pages.ModManager();
+                modManager.modInstallationFinnished += ModManager_modInstallationFinnished;
+                frameModManager.Content = modManager;
+            }
+            catch (Exception except)
+            {
+                audit.error(except.Message, except);
+            }
         }
 
         private void ModManager_modInstallationFinnished(object sender, EventArgs e)
