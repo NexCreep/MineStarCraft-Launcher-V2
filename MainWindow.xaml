@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         ContentRendered="Window_ContentRendered"
-        Title="MineStarCraft Launcher V2" Height="720" Width="1280"
-        WindowStartupLocation="CenterScreen"
+        Title="MineStarCraft Launcher V2" Height="750" Width="1280"
+        WindowStartupLocation="CenterScreen" WindowStyle="None"
         MinHeight="550" MinWidth="1200" ResizeMode="CanMinimize">
     <Window.Resources>
         <Style x:Key="FocusVisual">
@@ -86,206 +86,229 @@
             <Setter Property="Margin" Value="6 2"/>
         </Style>
     </Window.Resources>
-    <Grid>
+    <WindowChrome.WindowChrome>
+            <WindowChrome GlassFrameThickness="0" CornerRadius="20" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="7"/>
+    </WindowChrome.WindowChrome>
+        <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="./Assets/App/back/Untitle.png" Stretch="UniformToFill"/>
         </Grid.Background>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="2*" />
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="7*" />
-                <RowDefinition Height="0*" />
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0" Margin="0 10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="18*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" MouseDown="Grid_MouseDown">
+            <Grid.Background>
+                <SolidColorBrush Color="Black" Opacity="0.4"/>
+            </Grid.Background>
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Grid Width="50" Name="GridMiniminze" MouseDown="GridMiniminze_MouseDown" MouseEnter="GridMiniminze_MouseEnter" MouseLeave="GridMinimize_MouseLeave">
+                    <fa:FontAwesome Icon="WindowMinimize" Foreground="White" FontSize="20" Margin="2"/>
+                </Grid>
+                <Grid Width="50" Name="GridClose" MouseDown="GridClose_MouseDown" MouseEnter="GridClose_MouseEnter" MouseLeave="GridClose_MouseLeave">
+                    <fa:FontAwesome Icon="Close" Foreground="White" FontSize="25" Margin="2"/>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
                     <RowDefinition Height="7*" />
+                    <RowDefinition Height="0*" />
                 </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0 10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="7*" />
+                    </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Name="modCountText" TextAlignment="Center" Foreground="White"
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Name="modCountText" TextAlignment="Center" Foreground="White"
                            FontSize="28" Margin="10 0" Text="?" Height="50"/>
-                    <TextBlock TextAlignment="Center" Foreground="White"
+                        <TextBlock TextAlignment="Center" Foreground="White"
                            FontSize="28" Height="50">Mods Instalados</TextBlock>
-                    <Button Margin="20 0"
+                        <Button Margin="20 0"
                             Background="Transparent" Style="{DynamicResource ButtonStyle1}"
                             Padding="2" BorderThickness="0"
                             FontSize="16" FontWeight="Bold" Cursor="Hand"
                             VerticalAlignment="Center" Click="Folder_Mod_Click">
-                        <Image Source="./Assets/App/svg/folder.png" Width="50" Height="50" 
+                            <Image Source="./Assets/App/svg/folder.png" Width="50" Height="50" 
                                Stretch="UniformToFill"/>
-                    </Button>
-                </StackPanel>
+                        </Button>
+                    </StackPanel>
 
-                <ListBox Grid.Row="1" Name="modList"
+                    <ListBox Grid.Row="1" Name="modList"
                          Background="{x:Null}"
                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                          ScrollViewer.CanContentScroll="False"
                          Margin="10 1" BorderBrush="{x:Null}" Focusable="False">
-                    <ListBox.Resources>
-                        <Style x:Key="ScrollThumb" TargetType="{x:Type Thumb}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type Thumb}">
-                                        <Rectangle x:Name="Rectangle1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent" SnapsToDevicePixels="True"/>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="Tag" Value="Horizontal">
-                                                <Setter TargetName="Rectangle1" Property="Width" Value="Auto" />
-                                                <Setter TargetName="Rectangle1" Property="Height" Value="7" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                        <Style TargetType="ScrollBar">
-                            <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
-                            <Setter Property="Foreground" Value="Red" />
-                            <Setter Property="Background" Value="DarkGray" />
-                            <Setter Property="Width" Value="25" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ScrollBar}">
-                                        <Grid x:Name="GridRoot" Width="12" Background="Transparent">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="0.00001*" />
-                                            </Grid.RowDefinitions>
-                                            <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Focusable="false">
-                                                <Track.Thumb>
-                                                    <Thumb x:Name="Thumb" Background="White" Style="{DynamicResource ScrollThumbs}" Width="50" Opacity="0.8"/>
-                                                </Track.Thumb>
-                                                <Track.IncreaseRepeatButton>
-                                                    <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="false" />
-                                                </Track.IncreaseRepeatButton>
-                                                <Track.DecreaseRepeatButton>
-                                                    <RepeatButton x:Name="PageDown" Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="false" />
-                                                </Track.DecreaseRepeatButton>
-                                            </Track>
-                                        </Grid>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
-                                                <Setter Value="whitesmoke" TargetName="Thumb" Property="Background" />
-                                                <Setter TargetName="Thumb" Property="Cursor" Value="Hand" />
-                                                <Setter TargetName="Thumb" Property="Opacity" Value="1" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.Resources>
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="Background" Value="#FF4B4A4A" />
-                            <Setter Property="Margin" Value="0 2" />
-                            <Setter Property="Padding" Value="15" />
-                            <Setter Property="Focusable" Value="False" />
-                            <Setter Property="Cursor" Value="Hand" />
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" Value="Red" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding modName}"
+                        <ListBox.Resources>
+                            <Style x:Key="ScrollThumb" TargetType="{x:Type Thumb}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Thumb}">
+                                            <Rectangle x:Name="Rectangle1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Fill="Transparent" SnapsToDevicePixels="True"/>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="Tag" Value="Horizontal">
+                                                    <Setter TargetName="Rectangle1" Property="Width" Value="Auto" />
+                                                    <Setter TargetName="Rectangle1" Property="Height" Value="7" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                            <Style TargetType="ScrollBar">
+                                <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
+                                <Setter Property="Foreground" Value="Red" />
+                                <Setter Property="Background" Value="DarkGray" />
+                                <Setter Property="Width" Value="25" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                            <Grid x:Name="GridRoot" Width="12" Background="Transparent">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="0.00001*" />
+                                                </Grid.RowDefinitions>
+                                                <Track x:Name="PART_Track" Grid.Row="0" IsDirectionReversed="true" Focusable="false">
+                                                    <Track.Thumb>
+                                                        <Thumb x:Name="Thumb" Background="White" Style="{DynamicResource ScrollThumbs}" Width="50" Opacity="0.8"/>
+                                                    </Track.Thumb>
+                                                    <Track.IncreaseRepeatButton>
+                                                        <RepeatButton x:Name="PageUp" Command="ScrollBar.PageDownCommand" Opacity="0" Focusable="false" />
+                                                    </Track.IncreaseRepeatButton>
+                                                    <Track.DecreaseRepeatButton>
+                                                        <RepeatButton x:Name="PageDown" Command="ScrollBar.PageUpCommand" Opacity="0" Focusable="false" />
+                                                    </Track.DecreaseRepeatButton>
+                                                </Track>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
+                                                    <Setter Value="whitesmoke" TargetName="Thumb" Property="Background" />
+                                                    <Setter TargetName="Thumb" Property="Cursor" Value="Hand" />
+                                                    <Setter TargetName="Thumb" Property="Opacity" Value="1" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.Resources>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background" Value="#FF4B4A4A" />
+                                <Setter Property="Margin" Value="0 2" />
+                                <Setter Property="Padding" Value="15" />
+                                <Setter Property="Focusable" Value="False" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Background" Value="Red" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding modName}"
                                        Foreground="White"
                                        FontSize="16px"/>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                </Grid>
 
             </Grid>
-
-        </Grid>
-        <Grid Grid.Column="1">
-            <StackPanel>
-                <TextBlock Name="versionText" HorizontalAlignment="Center" Foreground="LightGray" />
-                <TextBlock Name="launcherTypeText" HorizontalAlignment="Center" Foreground="LightGray" />
-            </StackPanel>
-            <StackPanel Orientation="Vertical"
-                        VerticalAlignment="Center">
-                <Image Source="./Assets/App/svg/MineStarCraftLogo.png"
-                       Stretch="UniformToFill"/>
-            </StackPanel>
-        </Grid>
-        <Grid Grid.Column="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+            <Grid Grid.Column="1">
+                <StackPanel>
+                    <TextBlock Name="versionText" HorizontalAlignment="Center" Foreground="LightGray" />
+                    <TextBlock Name="launcherTypeText" HorizontalAlignment="Center" Foreground="LightGray" />
+                </StackPanel>
                 <StackPanel Orientation="Vertical"
+                        VerticalAlignment="Center">
+                    <Image Source="./Assets/App/svg/MineStarCraftLogo.png"
+                       Stretch="UniformToFill"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <StackPanel Orientation="Vertical"
                             VerticalAlignment="Center">
-                    <Image Name="ServerStatusGif" Width="300"  Margin="60 0"/>
-                    <StackPanel 
+                        <Image Name="ServerStatusGif" Width="300"  Margin="60 0"/>
+                        <StackPanel 
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                        <TextBlock Style="{DynamicResource ServerStatusHeader}"
+                            <TextBlock Style="{DynamicResource ServerStatusHeader}"
                                    Foreground="White">
                             Estado del servidor:
-                        </TextBlock>
-                        <TextBlock Style="{DynamicResource ServerStatusHeader}"
+                            </TextBlock>
+                            <TextBlock Style="{DynamicResource ServerStatusHeader}"
                                    Name="ServerStatusResult"
                                    Foreground="White">
                             Checking...
-                        </TextBlock>
-                    </StackPanel>
-                    <StackPanel
+                            </TextBlock>
+                        </StackPanel>
+                        <StackPanel
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
-                        <TextBlock Name="ServerStatusLatency"
+                            <TextBlock Name="ServerStatusLatency"
                             Style="{DynamicResource ServerStatusSubheader}">
                             Latencia: ?
-                        </TextBlock>
-                        <TextBlock Name="ServerStatusVersion"
+                            </TextBlock>
+                            <TextBlock Name="ServerStatusVersion"
                             Style="{DynamicResource ServerStatusSubheader}">
                             Versión: ?
-                        </TextBlock>
-                        <TextBlock Name="ServerStatusPlayers"
+                            </TextBlock>
+                            <TextBlock Name="ServerStatusPlayers"
                             Style="{DynamicResource ServerStatusSubheader}">
                             Jugadores: ?/?
-                        </TextBlock>
+                            </TextBlock>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="1">
-                <StackPanel VerticalAlignment="Center">
-                    <Frame Name="frameModManager"
+                </Grid>
+                <Grid Grid.Row="1">
+                    <StackPanel VerticalAlignment="Center">
+                        <Frame Name="frameModManager"
                        NavigationUIVisibility="Hidden"/>
-                </StackPanel>
-            </Grid>
-            <Grid Grid.Row="2" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Button Name="StartLauncherButton" Style="{DynamicResource ButtonStyle1}" 
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="2" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button Name="StartLauncherButton" Style="{DynamicResource ButtonStyle1}" 
                         Margin="20" Padding="20" Cursor="Hand" FontWeight="SemiBold"
                         Content="Empezar" FontSize="24" Click="StartLauncherButton_Click"
                         Grid.Column="0"/>
 
-                <Button Name="ChangeLauncherButton" Style="{DynamicResource ButtonStyle1}"
+                    <Button Name="ChangeLauncherButton" Style="{DynamicResource ButtonStyle1}"
                         Margin="10 20" Padding="20" Cursor="Hand"
                         Grid.Column="1" Click="ChangeLauncherButton_Click">
-                    <fa:FontAwesome Icon="WindowRestore" FontSize="24" VerticalAlignment="Center" FontWeight="Light"/>
-                </Button>
+                        <fa:FontAwesome Icon="Rocket" FontSize="24" VerticalAlignment="Center" FontWeight="Light"/>
+                    </Button>
 
+                </Grid>
             </Grid>
-        </Grid>
 
-        <StackPanel Grid.Column="1" VerticalAlignment="Center">
-            <Canvas>
-                <Frame Background="White" Name="SelectorFrame"
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <Canvas>
+                    <Frame Background="White" Name="SelectorFrame"
                        Canvas.Top="-160" Canvas.Left="-140" NavigationUIVisibility="Hidden"/>
-            </Canvas>
-        </StackPanel>
+                </Canvas>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

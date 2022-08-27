@@ -239,6 +239,42 @@ namespace MineStarCraft_Launcher
             OpenLauncherSelector();
         }
 
+
+        private void GridClose_MouseEnter(object sender, MouseEventArgs e)
+        {
+            GridClose.Background = Brushes.Red;
+        }
+
+        private void GridClose_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
+
+        private void GridClose_MouseLeave(object sender, MouseEventArgs e)
+        {
+            GridClose.Background = Brushes.Transparent;
+        }
+
+        private void GridMiniminze_MouseEnter(object sender, MouseEventArgs e)
+        {
+            GridMiniminze.Background = Brushes.Gray;
+        }
+
+        private void GridMiniminze_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void GridMinimize_MouseLeave(object sender, MouseEventArgs e)
+        {
+            GridMiniminze.Background = Brushes.Transparent;
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                DragMove();
+        }
     }
 
     

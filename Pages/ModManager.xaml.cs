@@ -140,8 +140,25 @@ namespace MineStarCraft_Launcher.Pages
                         {
                             using (WebClient wc = new WebClient())
                             {
+                                
                                 string newConfig = wc.DownloadString($"https://raw.githubusercontent.com/NexCreep/minesc-modpack-v2/main/.config/{config}");
-                                File.WriteAllText($@"{Environment.GetEnvironmentVariable("appdata")}/.minecraft/config/{config}", newConfig);
+                                FileStream fs = null;
+
+                                if (!File.Exists($@"{Environment.GetEnvironmentVariable("appdata")}/.minecraft/config/{config}"))
+                                {
+                                    Directory.CreateDirectory($@"{Environment.GetEnvironmentVariable("appdata")}/.minecraft/config/{config.Substring(0, config.IndexOf('/'))}");
+                                    fs = File.Create($@"{Environment.GetEnvironmentVariable("appdata")}/.minecraft/config/{config}");
+                                }
+
+                                if (fs == null)
+                                {
+                                    fs = new FileStream($@"{Environment.GetEnvironmentVariable("appdata")}/.minecraft/config/{config}", FileMode.Create, FileAccess.Write);
+                                }
+
+                                byte[] byteArray = new UTF8Encoding(true).GetBytes(newConfig);
+                                fs.Write(byteArray, 0, byteArray.Length);
+                                fs.Close();
+
                             }
                         }
                     }
@@ -178,8 +195,20 @@ namespace MineStarCraft_Launcher.Pages
                         iconInfo.Icon = FontAwesome.WPF.FontAwesomeIcon.Warning;
                         iconInfo.Foreground = Brushes.Yellow;
 
+                        string contentMsg = $"¿Quieres actualizar a la nueva versión?\n{localPackInfo.Version} >> {packInfo.Version}\n\nSe añadirán:\n";
+                        foreach (string newmod in packInfo.NewMods)
+                        {
+                            contentMsg += $"- {newmod}\n";
+                        }
+                        contentMsg += $"\nSe eliminarán:\n";
+                        foreach (string oldmod in packInfo.RemovedMods)
+                        {
+                            contentMsg += $"- {oldmod}\n";
+                        }
+
+
                         MessageBoxResult result = MessageBox.Show(
-                            $"¿Quieres actualizar a la nueva version?\n{localPackInfo.Version} >> {packInfo.Version}",
+                            contentMsg,
                             "Actualización disponible",
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question
